@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface InventoryRepository extends JpaRepository<Inventory,Long> {
+public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     Inventory findByPlayer(Player player);
     List<Inventory> findByItems(List<Item> items);
+    boolean existsByPlayer(Player player);
 }

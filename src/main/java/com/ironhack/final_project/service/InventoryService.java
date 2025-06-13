@@ -1,6 +1,7 @@
 package com.ironhack.final_project.service;
 
 import com.ironhack.final_project.dto.InventoryRequestDTO;
+import com.ironhack.final_project.exception.BadRequestException;
 import com.ironhack.final_project.exception.InventoryNotFoundException;
 import com.ironhack.final_project.model.Inventory;
 import com.ironhack.final_project.model.Item;
@@ -20,12 +21,11 @@ public class InventoryService {
     }
 
     public Inventory create (InventoryRequestDTO inventoryRequestDTO) {
+        validatePlayer(inventoryRequestDTO.getPlayer());
         Inventory newInventory = new Inventory();
+        newInventory.setPlayer(inventoryRequestDTO.getPlayer());
         if (inventoryRequestDTO.getSpace() != 0) {
             newInventory.setSpace(inventoryRequestDTO.getSpace());
-        }
-        if (inventoryRequestDTO.getPlayer() != null) {
-            newInventory.setPlayer(inventoryRequestDTO.getPlayer());
         }
         if (inventoryRequestDTO.getItems() != null) {
             newInventory.setItems(inventoryRequestDTO.getItems());
@@ -76,5 +76,12 @@ public class InventoryService {
             throw new InventoryNotFoundException(id.toString());
         }
         return optionalInventory;
+    }
+
+    private void validatePlayer(Player player) {
+        boolean exists = inventoryRepository.existsByPlayer(player);
+        if (exists) {
+            throw new BadRequestException("Inventory from player " + player + " already exists.");
+        }
     }
 }
