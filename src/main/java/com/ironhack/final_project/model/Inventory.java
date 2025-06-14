@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -27,7 +28,7 @@ public class Inventory {
     @JoinTable(name = "inventory_items",
             joinColumns = @JoinColumn(name = "inventory_id"),
             inverseJoinColumns = @JoinColumn(name = "item_id"))
-    private List<Item> items;
+    private List<Item> items = new ArrayList<>();
 
     @OneToOne(mappedBy = "inventory")
     private Player player;

@@ -4,12 +4,62 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 
 @PrimaryKeyJoinColumn(name = "inventoryId")
 public class Market extends Inventory {
-    public void searchItem(Item item) {
-        //TODO
+    public Item searchItem(Inventory inventory, String name) {
+        for (Item item : inventory.getItems()) {
+            if (item.getName().equals(name)) {
+                return item;
+            }
+        }
+        return null;
     }
 
-    public void buyItem(Item item) {
-        //TODO
+    public boolean updateItemQuantity(Inventory inventory, String name, int quantity) {
+        Item inventoryItem = searchItem(inventory, name);
+        if (inventoryItem != null) {
+            inventoryItem.setQuantity(quantity);
+            return true;
+        }
+        return false;
+    }
+
+    public void buyItem(Item itemToBuy, Player player, int quantity) {
+        Inventory marketInventory = this;
+        Item marketItem = searchItem(marketInventory, itemToBuy.getName());
+        String itemName = "";
+        int newMarketQuantity = 0;
+        int newPlayerQuantity = 0;
+        if (marketItem != null) {
+            newMarketQuantity = marketItem.getQuantity() - quantity;
+            newPlayerQuantity = marketItem.getQuantity() + quantity;
+            itemName = marketItem.getName();
+        }
+        if (newMarketQuantity >= 0) {
+            int newPrice = marketItem.getPrice() * quantity;
+            if (player.getGold() >= newPrice) {
+                Inventory playerInventory = player.getInventory();
+                Player system = this.getPlayer();
+                boolean isUpdated;
+                isUpdated = updateItemQuantity(playerInventory, itemName, newPlayerQuantity);
+                if (!isUpdated) {
+                    marketItem.setQuantity(quantity);
+                    playerInventory.getItems().add(marketItem);
+                }
+                if (newMarketQuantity == 0) {
+                    marketInventory.getItems().remove(marketItem);
+                }
+                else {
+                    updateItemQuantity(marketInventory, itemName, newMarketQuantity);
+                }
+                player.setGold(player.getGold() - newPrice);
+                system.setGold(system.getGold() + newPrice);
+            }
+            else {
+                System.out.println("No tienes suficiente oro.");
+            }
+        }
+        else {
+            System.out.println("No hay stock suficiente.");
+        }
     }
 
     public void sellItem(Item item) {

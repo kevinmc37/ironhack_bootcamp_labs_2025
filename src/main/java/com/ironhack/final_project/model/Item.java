@@ -42,7 +42,7 @@ public class Item {
     @JoinTable(name = "item_effects",
             joinColumns = @JoinColumn(name = "item_id"),
             inverseJoinColumns = @JoinColumn(name = "effect_id"))
-    private List<Effect> effect;
+    private List<Effect> effect = new ArrayList<>();
 
     @ManyToMany(mappedBy = "items", fetch = FetchType.LAZY)
     private List<Inventory> inventory = new ArrayList<>();
