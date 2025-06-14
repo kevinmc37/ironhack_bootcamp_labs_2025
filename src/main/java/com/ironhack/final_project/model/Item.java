@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -16,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,8 +38,14 @@ public class Item {
     @NotBlank
     private String description;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "item_effects",
+            joinColumns = @JoinColumn(name = "item_id"),
+            inverseJoinColumns = @JoinColumn(name = "effect_id"))
     private List<Effect> effect;
+
+    @ManyToMany(mappedBy = "items", fetch = FetchType.LAZY)
+    private List<Inventory> inventory = new ArrayList<>();
 
     public void setAdditionalDescription() {
         String description = "\nCantidad: " + this.getQuantity() +

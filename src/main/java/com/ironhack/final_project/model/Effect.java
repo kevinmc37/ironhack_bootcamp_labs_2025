@@ -1,15 +1,15 @@
 package com.ironhack.final_project.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,6 +29,12 @@ public class Effect {
 
     @PositiveOrZero
     private int turns;
+
+    @ManyToMany(mappedBy = "effect")
+    private List<Item> items = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "status")
+    private List<Player> players = new ArrayList<>();
 
     public String slowTarget(Player player, int speed_debuff, int turns) {
         if (turns == 0) {

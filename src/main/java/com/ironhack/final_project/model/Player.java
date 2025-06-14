@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -37,7 +36,8 @@ public class Player {
     @Positive
     private int speed;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "inventory_id")
     private Inventory inventory;
 
     @PositiveOrZero
@@ -47,5 +47,8 @@ public class Player {
     private double weight;
 
     @ManyToMany
-    private List<Effect> status = new ArrayList<>();
+    @JoinTable(name = "player_status",
+    joinColumns = @JoinColumn(name = "player_id"),
+    inverseJoinColumns = @JoinColumn(name = "effect_id"))
+    private List<Effect> status;
 }

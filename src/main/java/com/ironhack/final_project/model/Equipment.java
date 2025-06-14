@@ -1,6 +1,10 @@
 package com.ironhack.final_project.model;
 
 import com.ironhack.final_project.enums.Equipable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +15,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@PrimaryKeyJoinColumn(name = "itemId")
 public class Equipment extends Item {
+    @Enumerated(EnumType.STRING)
     private Equipable type;
 
     @PositiveOrZero
