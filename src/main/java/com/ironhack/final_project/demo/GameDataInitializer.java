@@ -141,7 +141,7 @@ public class GameDataInitializer implements CommandLineRunner {
         system.setWeight(0);
         system.getStatus().add(effect2);
 
-        player.setName("Player1");
+        player.setName("DragonBoss85");
         player.setHealth(1200);
         player.setAttack(80);
         player.setDefense(65);

@@ -72,8 +72,14 @@ public class SecurityConfig {
         // <---- aquí es donde añadiré mis endpoints, si son públicos o no y con qué roles puedo acceder a los privados
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/api/login/**").permitAll()// public endpoint, no tienes que estar logeado ni ser parte de mi aplicación
-                .requestMatchers("api/greet").permitAll()
-                .requestMatchers("api/greet/personal").hasAnyAuthority("ROLE_USER")
+                .requestMatchers(GET, "/api/players/name").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .requestMatchers(GET, "/api/players/name-containing").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .requestMatchers(GET, "/api/players/gold").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers(GET, "/api/players/status").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers(GET, "/api/inventories/player").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers(GET, "/api/inventories/items").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers(GET, "/api/items/name").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .requestMatchers(GET, "/api/effects/name").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 .requestMatchers(GET, "/api/users").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 .requestMatchers(POST, "/api/users").hasAnyAuthority("ROLE_ADMIN")
                 .requestMatchers(POST, "/api/roles").hasAnyAuthority("ROLE_ADMIN")
