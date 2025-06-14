@@ -8,7 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import static org.hibernate.annotations.CascadeType.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -47,8 +50,9 @@ public class Player {
     private double weight;
 
     @ManyToMany
+    @Cascade({REFRESH, MERGE})
     @JoinTable(name = "player_status",
     joinColumns = @JoinColumn(name = "player_id"),
     inverseJoinColumns = @JoinColumn(name = "effect_id"))
-    private List<Effect> status;
+    private List<Effect> status = new ArrayList<>();
 }

@@ -44,6 +44,7 @@ public class GameDataInitializer implements CommandLineRunner {
         Effect effect1 = new Effect();
         effect1.setName("Reposando");
         effect1.setDescription("Nada especial.");
+        effect1.setTurns(0);
         effect1.setItems(new ArrayList<>());
         effect1.setPlayers(new ArrayList<>());
 
@@ -62,16 +63,14 @@ public class GameDataInitializer implements CommandLineRunner {
         weapon.setQuantity(1);
         weapon.setPrice(3300);
         weapon.setWeight(2.6);
-        weapon.setDescription("""
-                Forjado en las profundidades de una antigua
-                caverna glacial, el Bastón de Hielo Eterno canaliza el poder
-                primigenio del invierno. Este bastón mágico emite un frío
-                perpetuo que congela el aire, permitiendo lanzar proyectiles
-                de hielo que ralentizan a los enemigos.""");
+        weapon.setDescription("Este bastón mágico emite un frío\n" +
+            "perpetuo que congela el aire, permitiendo lanzar proyectiles\n" +
+            "de hielo que ralentizan a los enemigos.\n");
         weapon.setEquipmentDescription();
         weapon.getEffect().add(effect2);
         weapon.setInventory(new ArrayList<>());
         weapon.setType(Equipable.WEAPON);
+        weapon.setRecipes(new ArrayList<>());
 
         armor.setName("Armadura de Telaraña Prístina");
         armor.setDefense(33);
@@ -79,39 +78,40 @@ public class GameDataInitializer implements CommandLineRunner {
         armor.setQuantity(1);
         armor.setPrice(3300);
         armor.setWeight(15.8);
-        armor.setDescription("""
-                Esta armadura ligera está tejida cuidadosamente con
-                hilos de Telaraña Prístina, combinando flexibilidad y resistencia
-                en perfecta armonía. Proporciona una protección sólida contra
-                ataques físicos sin sacrificar la movilidad.""");
+        armor.setDescription("Esta armadura ligera está tejida cuidadosamente con\n" +
+            "hilos de Telaraña Prístina, Proporciona una protección sólida contra\n" +
+            "ataques físicos.\n");
         armor.setEquipmentDescription();
         armor.getEffect().add(effect1);
         armor.setInventory(new ArrayList<>());
         armor.setType(Equipable.ARMOR);
+        armor.setRecipes(new ArrayList<>());
 
         spider_key.setName("Llave de la Araña");
         spider_key.setQuantity(1);
         spider_key.setPrice(3300);
         spider_key.setWeight(0.5);
-        spider_key.setDescription("""
-                Llave hecha de telarañas. Sirve para abrir la
-                Mazmorra de la Araña en el Bosque Sombrío.""");
+        spider_key.setDescription("Llave hecha de telarañas. Sirve para abrir la\n" +
+            "Mazmorra de la Araña en el Bosque Sombrío.");
         spider_key.setAdditionalDescription();
         spider_key.getEffect().add(effect1);
         spider_key.setInventory(new ArrayList<>());
+        spider_key.setRecipes(new ArrayList<>());
 
         resource.setName("Telaraña Prístina");
         resource.setPrice(150);
         resource.setQuantity(20);
         resource.setWeight(0.1);
-        resource.setDescription("""
-                Una fina y resistente telaraña recolectada de
-                las arañas místicas del Bosque Sombrío. Utilizada en la
-                fabricación de armaduras livianas y llaves de araña.""");
+        resource.setDescription("Una fina y resistente telaraña recolectada de\n" +
+            "las arañas místicas del Bosque Sombrío. Utilizada en la\n" +
+            "fabricación de armaduras livianas y llaves de araña.\n");
         resource.setAdditionalDescription();
         resource.getEffect().add(effect1);
         resource.setInventory(new ArrayList<>());
-        resource.setRecipe(new ArrayList<>());
+        resource.setRecipes(new ArrayList<>());
+        resource.setUsedInRecipe(new ArrayList<>(List.of(spider_key)));
+
+        spider_key.getRecipes().add(resource);
 
         effect1.getItems().addAll(List.of(armor, spider_key, resource));
         effect2.getItems().add(weapon);
@@ -128,7 +128,7 @@ public class GameDataInitializer implements CommandLineRunner {
         armor.getInventory().add(market);
         spider_key.getInventory().add(inventory);
         resource.getInventory().add(market);
-        resource.setRecipe(List.of(armor, spider_key));
+        resource.setRecipes(List.of(armor, spider_key));
 
         system.setName("Sistema");
         system.setHealth(1);
@@ -157,10 +157,29 @@ public class GameDataInitializer implements CommandLineRunner {
         market.setPlayer(system);
         inventory.setPlayer(player);
 
-        playerRepository.saveAll(List.of(system, player));
+        /*Útil hacerlo 1 a 1 para testear
+
+        effectRepository.save(effect1);
+        effectRepository.save(effect2);
+        itemRepository.save(weapon);
+        itemRepository.save(armor);
+        itemRepository.save(resource);
+        itemRepository.save(spider_key);
+        inventoryRepository.save(market);
+        inventoryRepository.save(inventory);
+        playerRepository.save(system);
+        playerRepository.save(player);
+
+        Orden de guardado:
+
+        Players contiene inventarios y effects
+        Inventario contiene items
+        Items contiene effects*/
+
         effectRepository.saveAll(List.of(effect1, effect2));
-        inventoryRepository.saveAll(List.of(market, inventory));
         itemRepository.saveAll(List.of(weapon, armor, resource, spider_key));
+        inventoryRepository.saveAll(List.of(market, inventory));
+        playerRepository.saveAll(List.of(system, player));
 
         System.out.println("Effects, items, inventories and players created.");
     }

@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,7 @@ public class Inventory {
     private int space;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @Cascade({CascadeType.REFRESH, CascadeType.MERGE})
     @JoinTable(name = "inventory_items",
             joinColumns = @JoinColumn(name = "inventory_id"),
             inverseJoinColumns = @JoinColumn(name = "item_id"))

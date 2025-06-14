@@ -1,7 +1,9 @@
 package com.ironhack.final_project.model;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 
+@Entity
 @PrimaryKeyJoinColumn(name = "inventoryId")
 public class Market extends Inventory {
     public Item searchItem(Inventory inventory, String name) {
@@ -26,15 +28,18 @@ public class Market extends Inventory {
         Inventory marketInventory = this;
         Item marketItem = searchItem(marketInventory, itemToBuy.getName());
         String itemName = "";
-        int newMarketQuantity = 0;
+        int itemPrice = 0;
+        int newMarketQuantity = -1;
         int newPlayerQuantity = 0;
         if (marketItem != null) {
-            newMarketQuantity = marketItem.getQuantity() - quantity;
-            newPlayerQuantity = marketItem.getQuantity() + quantity;
+            int originalQuantity = marketItem.getQuantity();
+            newMarketQuantity = originalQuantity - quantity;
+            newPlayerQuantity = originalQuantity + quantity;
+            itemPrice = marketItem.getPrice();
             itemName = marketItem.getName();
         }
         if (newMarketQuantity >= 0) {
-            int newPrice = marketItem.getPrice() * quantity;
+            int newPrice = itemPrice * quantity;
             if (player.getGold() >= newPrice) {
                 Inventory playerInventory = player.getInventory();
                 Player system = this.getPlayer();

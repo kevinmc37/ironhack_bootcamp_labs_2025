@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +33,11 @@ public class Effect {
     private int turns;
 
     @ManyToMany(mappedBy = "effect")
+    @Cascade({CascadeType.REFRESH, CascadeType.MERGE})
     private List<Item> items = new ArrayList<>();
 
     @ManyToMany(mappedBy = "status")
+    @Cascade({CascadeType.REFRESH, CascadeType.MERGE})
     private List<Player> players = new ArrayList<>();
 
     public String slowTarget(Player player, int speed_debuff, int turns) {

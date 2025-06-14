@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,13 +41,22 @@ public class Item {
     private String description;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @Cascade({CascadeType.REFRESH, CascadeType.MERGE})
     @JoinTable(name = "item_effects",
             joinColumns = @JoinColumn(name = "item_id"),
             inverseJoinColumns = @JoinColumn(name = "effect_id"))
     private List<Effect> effect = new ArrayList<>();
 
     @ManyToMany(mappedBy = "items", fetch = FetchType.LAZY)
+    @Cascade({CascadeType.REFRESH, CascadeType.MERGE})
     private List<Inventory> inventory = new ArrayList<>();
+
+    @ManyToMany
+    @Cascade({CascadeType.REFRESH, CascadeType.MERGE})
+    @JoinTable(name = "item_recipes",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "items_used_id"))
+    private List<Item> recipes = new ArrayList<>();
 
     public void setAdditionalDescription() {
         String description = "\nCantidad: " + this.getQuantity() +
