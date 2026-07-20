@@ -1,0 +1,8 @@
+# Ignorar carpetas de dependencias en cualquier subcarpeta
+**/node_modules/
+**/vendor/
+
+# Ignorar archivos de configuración local y del sistema
+**/.env
+**.DS_Store
+**/application.properties
