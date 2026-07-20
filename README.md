@@ -1,0 +1,1 @@
+IntArrayList should be used when you want to enter few numbers into the array. If you have a big list of numbers, use intVector instead, as this type of array increases its bounds exponentially and has more capacity.
