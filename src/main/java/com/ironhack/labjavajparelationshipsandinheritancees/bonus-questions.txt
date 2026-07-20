@@ -1,0 +1,8 @@
+1. Menciona 3 tareas que se pueden realizar con SQL nativo pero que son difíciles o
+imposibles con JPQL.
+    La optimización de consultas más complejas, consultas y operaciones de bajo nivel
+    o interactuar directamente con características específicas de la base de datos.
+
+2. Explica por qué podrías preferir usar SQL nativo en proyectos del mundo real.
+    Porque se puede tener más control sobre la query y consultas más avanzadas, pudiéndola hacer
+    más específica y optimizada para la base de datos.
